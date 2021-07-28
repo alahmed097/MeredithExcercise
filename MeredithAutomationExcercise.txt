@@ -1,0 +1,55 @@
+
+// I have used TestNG framework for this testing.
+
+package MeredithExcercise;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class AllrecipesHomePage {
+	
+WebDriver driver;
+	
+	@BeforeMethod
+	public void setUp() {
+		System.setProperty("webdriver.chrome.driver", "/Users/AliAhmed/Downloads/chromedriver");
+		driver = new ChromeDriver();//launch chrome
+		
+		driver.get("https://www.allrecipes.com/");
+
+}
+	@Test(priority=1)
+	public void validateHomePage(){
+		String title = driver.getTitle();
+		Assert.assertEquals(title, "Allrecipes | Food, friends, and recipe inspiration");
+	}
+	
+	@Test(priority=2)
+		public void verifySearchfunctionalityUsingValidName() {
+			driver.findElement(By.name("search")).sendKeys("Byrani");
+			driver.findElement(By.className("button searchButton")).click();
+			String link = driver.getCurrentUrl();
+			Assert.assertEquals(link, "https://www.allrecipes.com/search/results/?search=Byrani");
+		}
+		
+	@Test(priority=3)
+		public void verifySearchfunctionalityUsingInvalidName() {
+		driver.findElement(By.name("search")).sendKeys("idk123");
+		driver.findElement(By.className("button searchButton")).click();
+		Assert.assertEquals(driver.getTitle(), "Recipe Results for idk123");
+	}
+	
+	@AfterMethod
+	public void tearDown() {
+		driver.quit();
+		
+	}
+	
+}
